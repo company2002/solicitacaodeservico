@@ -486,86 +486,91 @@
             return true;
         }
 
-        function enviarWhatsApp() {
-            const nome = document.getElementById('name').value;
-            const telefone = document.getElementById('telefone').value;
-            const valor = document.getElementById('valor').value;
-            const tipo = document.getElementById('tipo').value;
-            let parcelas = '';
-            let ultimaPrestacao = '';
-            let observacao = document.getElementById('obs').value;
-            const operador = document.getElementById('operador').value;
+   function enviarWhatsApp() {
+    const nome = document.getElementById('name').value;
+    const telefone = document.getElementById('telefone').value;
+    const valor = document.getElementById('valor').value;
+    const tipo = document.getElementById('tipo').value;
+    let parcelas = '';
+    let ultimaPrestacao = '';
+    let observacao = document.getElementById('obs').value;
+    const operador = document.getElementById('operador').value;
 
-            if (tipo === 'parcelado' || tipo === 'renovacao_parcelado') {
-                parcelas = document.getElementById('parcelas').value;
-                if (tipo === 'renovacao_parcelado') {
-                    ultimaPrestacao = document.getElementById('ultimaPrestacao').value;
-                }
-            } else if (tipo === 'cartao' || tipo === 'renovacao_cartao') {
-                parcelas = document.getElementById('parcelasCartao').value;
-            } else if (tipo === 'avulso') {
-                parcelas = document.getElementById('prazo').value + ' dias';
-            }
-
-            const juros = document.getElementById('juros').innerText;
-            const total = document.getElementById('total').innerText;
-            const prestacao = document.getElementById('prestacao').innerText;
-            const valorReceber = document.getElementById('valorReceber').innerText;
-
-            let formaRecebimento = document.getElementById('formaRecebimento').value;
-            formaRecebimento = formaRecebimento === 'pix' ? 'PIX' : 'Transferência Bancária';
-
-            let detalhesRecebimento = '';
-
-            if (formaRecebimento === 'PIX') {
-                const tipoChavePix = document.getElementById('tipoChavePix').value;
-                const chavePix = document.getElementById('pix').value;
-                const bancoPix = document.getElementById('bancoPix').value;
-                const outroBancoPix = document.getElementById('bancoPixOutro').value;
-                const banco = bancoPix === 'outro' ? outroBancoPix : bancoPix;
-                detalhesRecebimento = `Banco: ${banco}\nTipo de Chave PIX: ${tipoChavePix}\nChave PIX: ${chavePix}`;
-            } else if (formaRecebimento === 'Transferência Bancária') {
-                const bancoTransfer = document.getElementById('bancoTransferencia').value;
-                const outroBancoTransfer = document.getElementById('bancoTransferenciaOutro').value;
-                const banco = bancoTransfer === 'outro' ? outroBancoTransfer : bancoTransfer;
-                const agencia = document.getElementById('agencia').value;
-                const conta = document.getElementById('conta').value;
-                const tipoConta = document.getElementById('tipoConta').value;
-                detalhesRecebimento = `Banco: ${banco}\nAgência: ${agencia}\nConta: ${conta}\nTipo de Conta: ${tipoConta}`;
-            }
-
-            let mensagem = `*Solicitação de Empréstimo*\n` +
-                `*Nome*: ${capitalizar(nome)}\n` +
-                `*Número de Telefone*: ${telefone}\n` +
-                `*Valor Solicitado*: ${valor}\n` +
-                `*Tipo de Empréstimo*: ${capitalizar(tipo)}\n` +
-                `*Parcelas*: ${parcelas}\n` +
-                `*Juros*: ${juros}\n` +
-                `*Total*: ${total}\n` +
-                `*Prestação*: ${prestacao}\n` +
-                `*Valor a Receber*: ${valorReceber}\n` +
-                `*Forma de Recebimento*: ${formaRecebimento}\n` +
-                `*Detalhes do Recebimento*:\n${detalhesRecebimento}\n` +
-                `*Observação*: ${observacao}\n` +
-                `*Colaborador*: ${capitalizar(operador)}\n` +
-                `*Data e Hora da Solicitação*: ${dataHora}`;
-
-            if (ultimaPrestacao) {
-                mensagem += `\nValor da Última Prestação a Abater: R$ ${ultimaPrestacao}`;
-            }
-
-            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento. Lembre-se: sua senha de 6 dígitos pode ser solicitada. Ela é pessoal e intransferível. Caso não possua, solicite o cadastro.*`;
-
-            const operadorNumero = document.querySelector(`#operador option[value="${operador}"]`).getAttribute('data-numero');
-            const whatsappLink = `https://wa.me/${operadorNumero}?text=${encodeURIComponent(mensagem)}`;
-            window.open(whatsappLink, '_blank');
+    if (tipo === 'parcelado' || tipo === 'renovacao_parcelado') {
+        parcelas = document.getElementById('parcelas').value;
+        if (tipo === 'renovacao_parcelado') {
+            ultimaPrestacao = document.getElementById('ultimaPrestacao').value;
         }
+    } else if (tipo === 'cartao' || tipo === 'renovacao_cartao') {
+        parcelas = document.getElementById('parcelasCartao').value;
+    } else if (tipo === 'avulso') {
+        parcelas = document.getElementById('prazo').value + ' dias';
+    }
 
-        function capitalizar(palavra) {
-            return palavra.charAt(0).toUpperCase() + palavra.slice(1);
-        }
+    const juros = document.getElementById('juros').innerText;
+    const total = document.getElementById('total').innerText;
+    const prestacao = document.getElementById('prestacao').innerText;
+    const valorReceber = document.getElementById('valorReceber').innerText;
 
-        const dataHora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    let formaRecebimento = document.getElementById('formaRecebimento').value;
+    formaRecebimento = formaRecebimento === 'pix' ? 'PIX' : 'Transferência Bancária';
+
+    let detalhesRecebimento = '';
+
+    if (formaRecebimento === 'PIX') {
+        const tipoChavePix = document.getElementById('tipoChavePix').value;
+        const chavePix = document.getElementById('pix').value;
+        const bancoPix = document.getElementById('bancoPix').value;
+        const outroBancoPix = document.getElementById('bancoPixOutro').value;
+        const banco = bancoPix === 'outro' ? outroBancoPix : bancoPix;
+        detalhesRecebimento = `Banco: ${banco}\nTipo de Chave PIX: ${tipoChavePix}\nChave PIX: ${chavePix}`;
+    } else if (formaRecebimento === 'Transferência Bancária') {
+        const bancoTransfer = document.getElementById('bancoTransferencia').value;
+        const outroBancoTransfer = document.getElementById('bancoTransferenciaOutro').value;
+        const banco = bancoTransfer === 'outro' ? outroBancoTransfer : bancoTransfer;
+        const agencia = document.getElementById('agencia').value;
+        const conta = document.getElementById('conta').value;
+        const tipoConta = document.getElementById('tipoConta').value;
+        detalhesRecebimento = `Banco: ${banco}\nAgência: ${agencia}\nConta: ${conta}\nTipo de Conta: ${tipoConta}`;
+    }
+
+    let mensagem = `*Solicitação de Empréstimo*\n` +
+        `*Nome*: ${capitalizar(nome)}\n` +
+        `*Número de Telefone*: ${telefone}\n` +
+        `*Valor Solicitado*: ${valor}\n` +
+        `*Tipo de Empréstimo*: ${capitalizar(tipo.replace('renovacao', 'renovação'))}\n` +
+        `*Parcelas*: ${parcelas}\n` +
+        `*Juros*: ${juros}\n` +
+        `*Total*: ${total}\n` +
+        `*Prestação*: ${prestacao.replace('prestacao', 'prestação')}\n`;
+
+    // Adiciona informações de recebimento apenas se não for "cartão" ou "renovação do cartão"
+    if (tipo !== 'cartao' && tipo !== 'renovacao_cartao') {
+        mensagem += `*Valor a Receber*: ${valorReceber}\n` +
+            `*Forma de Recebimento*: ${formaRecebimento}\n` +
+            `*Detalhes do Recebimento*:\n${detalhesRecebimento}\n`;
+    }
+
+    mensagem += `*Observação*: ${observacao}\n` +
+        `*Colaborador*: ${capitalizar(operador)}\n` +
+        `*Data e Hora da Solicitação*: ${dataHora}`;
+
+    if (ultimaPrestacao) {
+        mensagem += `\nValor da Última Prestação a Abater: R$ ${ultimaPrestacao}`;
+    }
+
+    mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento. Lembre-se: sua senha de 6 dígitos pode ser solicitada. Ela é pessoal e intransferível. Caso não possua, solicite o cadastro.*`;
+
+    const operadorNumero = document.querySelector(`#operador option[value="${operador}"]`).getAttribute('data-numero');
+    const whatsappLink = `https://wa.me/${operadorNumero}?text=${encodeURIComponent(mensagem)}`;
+    window.open(whatsappLink, '_blank');
+}
+
+function capitalizar(palavra) {
+    return palavra.charAt(0).toUpperCase() + palavra.slice(1);
+}
+
+const dataHora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
 
 
