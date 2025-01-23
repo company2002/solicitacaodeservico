@@ -284,7 +284,7 @@
             <label for="operador">Selecione o Colaborador:</label>
             <select id="operador">
                 <option value="Escolha"></option>
-            <label for="operador">Selecione o Colaborador:</label>
+                <label for="operador">Selecione o Colaborador:</label>
                 <option value="Atendente1" data-numero="5521977434614">Atendente1</option>
                 <option value="Atendente2" data-numero="5521979054104">Atendente2</option>
                 <option value="Atendente3" data-numero="552100000000">Atendente3</option>
@@ -584,7 +584,7 @@
                 `*Nome*: ${capitalizar(nome)}\n` +
                 `*Número de Telefone*: ${telefone}\n` +
                 `*Valor Solicitado*: ${valor}\n` +
-                `*Tipo de Empréstimo*: ${capitalizar(tipo.replace('renovacao', 'renovação'))}\n` +
+                `*Tipo de Empréstimo*: ${capitalizar(tipo.replace('renovacao', 'renovação').replace('cartao', 'cartão'))}\n` +
                 `*Parcelas*: ${parcelas}\n` +
                 `*Juros*: ${juros}\n` +
                 `*Total*: ${total}\n` +
@@ -597,6 +597,7 @@
                     `*Detalhes do Recebimento*:\n${detalhesRecebimento}\n`;
             }
 
+
             mensagem += `*Observação*: ${observacao}\n` +
                 `*Colaborador*: ${capitalizar(operador)}\n` +
                 `*Data e Hora da Solicitação*: ${dataHora}`;
@@ -605,7 +606,7 @@
                 mensagem += `\nValor da Última Prestação a Abater: R$ ${ultimaPrestacao}`;
             }
 
-            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento.....*`;
+            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento. Lembre-se: sua senha de 6 dígitos pode ser solicitada. Ela é pessoal e intransferível. Caso não possua, solicite o cadastro.*`;
 
             const operadorNumero = document.querySelector(`#operador option[value="${operador}"]`).getAttribute('data-numero');
             const whatsappLink = `https://wa.me/${operadorNumero}?text=${encodeURIComponent(mensagem)}`;
