@@ -356,45 +356,56 @@
             input.value = valor; // Atualiza o valor do campo de entrada
         }
 
+    function atualizarOpcoes() {
+        const tipo = document.getElementById('tipo').value;
+        const opcoesAvulso = document.getElementById('opcoesAvulso');
+        const opcoesParcelado = document.getElementById('opcoesParcelado');
+        const opcoesCartao = document.getElementById('opcoesCartao');
+        const opcoesRenovacaoParcelado = document.getElementById('opcoesRenovacaoParcelado');
+        const observacao = document.getElementById('observacao');
+        const recebimentoPix = document.getElementById('recebimentoPix');
+        const recebimentoTransferencia = document.getElementById('recebimentoTransferencia');
+        const formaRecebimento = document.getElementById('formaRecebimento');
 
-        function atualizarOpcoes() {
-            const tipo = document.getElementById('tipo').value;
-            document.getElementById('opcoesAvulso').classList.add('hidden');
-            document.getElementById('opcoesParcelado').classList.add('hidden');
-            document.getElementById('opcoesCartao').classList.add('hidden');
-            document.getElementById('opcoesRenovacaoParcelado').classList.add('hidden');
-            document.getElementById('observacao').classList.add('hidden');
+        opcoesAvulso.classList.add('hidden');
+        opcoesParcelado.classList.add('hidden');
+        opcoesCartao.classList.add('hidden');
+        opcoesRenovacaoParcelado.classList.add('hidden');
+        observacao.classList.add('hidden');
+        recebimentoPix.classList.add('hidden');
+        recebimentoTransferencia.classList.add('hidden');
+        formaRecebimento.classList.add('hidden');
 
-            if (tipo === 'avulso') {
-                document.getElementById('opcoesAvulso').classList.remove('hidden');
-            } else if (tipo === 'parcelado') {
-                document.getElementById('opcoesParcelado').classList.remove('hidden');
-                abrirModal();
-            } else if (tipo === 'cartao') {
-                document.getElementById('opcoesCartao').classList.remove('hidden');
-            } else if (tipo === 'renovacao_parcelado') {
-                document.getElementById('opcoesParcelado').classList.remove('hidden');
-                document.getElementById('opcoesRenovacaoParcelado').classList.remove('hidden');
-                document.getElementById('observacao').classList.remove('hidden');
-            } else if (tipo === 'renovacao_cartao') {
-                document.getElementById('opcoesCartao').classList.remove('hidden');
-                document.getElementById('observacao').classList.remove('hidden');
-            }
+        if (tipo === 'avulso') {
+            opcoesAvulso.classList.remove('hidden');
+            formaRecebimento.classList.remove('hidden');
+        } else if (tipo === 'parcelado') {
+            opcoesParcelado.classList.remove('hidden');
+            formaRecebimento.classList.remove('hidden');
+            abrirModal();
+        } else if (tipo === 'cartao') {
+            opcoesCartao.classList.remove('hidden');
+        } else if (tipo === 'renovacao_parcelado') {
+            opcoesParcelado.classList.remove('hidden');
+            opcoesRenovacaoParcelado.classList.remove('hidden');
+            observacao.classList.remove('hidden');
+            formaRecebimento.classList.remove('hidden');
+        } else if (tipo === 'renovacao_cartao') {
+            opcoesCartao.classList.remove('hidden');
+            observacao.classList.remove('hidden');
         }
+    }
 
-        function abrirModal() {
-            const modal = document.getElementById('modalParcelado');
-            modal.style.display = "block";
-        }
+    function abrirModal() {
+        const modal = document.getElementById('modalParcelado');
+        modal.style.display = "block";
+    }
 
-        function concordarTermos() {
-            fecharModal();
-        }
-
-        function fecharModal() {
-            const modal = document.getElementById('modalParcelado');
-            modal.style.display = "none";
-        }
+    function fecharModal() {
+        const modal = document.getElementById('modalParcelado');
+        modal.style.display = "none";
+    }
+</script>
 
         function atualizarFormaRecebimento() {
             const forma = document.getElementById('formaRecebimento').value;
