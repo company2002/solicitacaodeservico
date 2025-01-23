@@ -8,7 +8,14 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f3f4f6;
+            background-image: url('001.jpg');
+            /* Caminho da imagem */
+            background-size: cover;
+            /* Ajusta a imagem para cobrir toda a tela */
+            background-position: center;
+            /* Centraliza a imagem */
+            background-repeat: no-repeat;
+            /* Evita repetição da imagem */
             margin: 0;
             padding: 50px;
             display: flex;
@@ -70,7 +77,7 @@
         }
 
         button:active {
-            transform: scale(0.97);
+            transform: scale(0.95);
         }
 
         #resultado {
@@ -83,10 +90,6 @@
 
         input:invalid {
             border-color: red;
-        }
-
-        button:active {
-            transform: scale(0.95);
         }
 
         @keyframes fadeIn {
@@ -131,7 +134,6 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0, 0, 0);
             background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
         }
@@ -171,8 +173,6 @@
 
             <label for="telefone">Número de Telefone:</label>
             <input type="text" id="telefone" required>
-
-
 
             <label for="valor">Valor Solicitado (R$):</label>
             <input type="text" id="valor" required>
@@ -291,13 +291,13 @@
             </select>
 
             <div id="resultado">
-                <p>Juros: <span id="juros">R$ 0.00</span></p>
-                <p>Total com Juros: <span id="total">R$ 0.00</span></p>
-                <p>Prestação Mensal: <span id="prestacao">R$ 0.00</span></p>
-                <p>Valor a Receber: <span id="valorReceber">R$ 0.00</span></p>
+                <p>Juros: <span id="juros">R$ 0,00</span></p>
+                <p>Total com Juros: <span id="total">R$ 0,00</span></p>
+                <p>Prestação Mensal: <span id="prestacao">R$ 0,00</span></p>
+                <p>Valor a Receber: <span id="valorReceber">R$ 0,00</span></p>
             </div>
 
-            <button type="button" id="calcularBtn">Clique aqui antes de enviar</button>
+            <button type="button" id="calcularBtn">Clique para Simular</button>
             <button type="button" id="enviarBtn">Enviar Solicitação</button>
         </form>
 
@@ -306,21 +306,38 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Aviso -->
+    <div id="modalAviso" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModalAviso()">&times;</span>
+            <p>Você precisa clicar em 'Simular' antes de enviar sua solicitação.</p>
+            <button onclick="fecharModalAviso()">Voltar</button>
+        </div>
+    </div>
+
+    <!-- Modal Parcelado -->
     <div id="modalParcelado" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharModal()">&times;</span>
             <p>Critérios para parcelamento: É necessário que todos os pagamentos estejam em dia e que o cliente tenha
                 mais de um ano de cadastro em nosso escritório. Caso atenda a esses requisitos, o processo poderá ser
-                encaminhado para análise..</p>
+                encaminhado para análise.</p>
             <button onclick="concordarTermos()">Concordar e Continuar</button>
         </div>
     </div>
 
     <script>
-        document.getElementById('calcularBtn').addEventListener('click', calcularValores);
+        let simulacaoRealizada = false;
+
+        document.getElementById('calcularBtn').addEventListener('click', function () {
+            simulacaoRealizada = true;
+            calcularValores();
+        });
+
         document.getElementById('enviarBtn').addEventListener('click', function () {
-            if (validarFormulario()) {
+            if (!simulacaoRealizada) {
+                abrirModalAviso();
+            } else if (validarFormulario()) {
                 enviarWhatsApp();
                 mostrarConfirmacao();
             }
@@ -356,56 +373,69 @@
             input.value = valor; // Atualiza o valor do campo de entrada
         }
 
-    function atualizarOpcoes() {
-        const tipo = document.getElementById('tipo').value;
-        const opcoesAvulso = document.getElementById('opcoesAvulso');
-        const opcoesParcelado = document.getElementById('opcoesParcelado');
-        const opcoesCartao = document.getElementById('opcoesCartao');
-        const opcoesRenovacaoParcelado = document.getElementById('opcoesRenovacaoParcelado');
-        const observacao = document.getElementById('observacao');
-        const recebimentoPix = document.getElementById('recebimentoPix');
-        const recebimentoTransferencia = document.getElementById('recebimentoTransferencia');
-        const formaRecebimento = document.getElementById('formaRecebimento');
+        function atualizarOpcoes() {
+            const tipo = document.getElementById('tipo').value;
+            const opcoesAvulso = document.getElementById('opcoesAvulso');
+            const opcoesParcelado = document.getElementById('opcoesParcelado');
+            const opcoesCartao = document.getElementById('opcoesCartao');
+            const opcoesRenovacaoParcelado = document.getElementById('opcoesRenovacaoParcelado');
+            const observacao = document.getElementById('observacao');
+            const recebimentoPix = document.getElementById('recebimentoPix');
+            const recebimentoTransferencia = document.getElementById('recebimentoTransferencia');
+            const formaRecebimento = document.getElementById('formaRecebimento');
 
-        opcoesAvulso.classList.add('hidden');
-        opcoesParcelado.classList.add('hidden');
-        opcoesCartao.classList.add('hidden');
-        opcoesRenovacaoParcelado.classList.add('hidden');
-        observacao.classList.add('hidden');
-        recebimentoPix.classList.add('hidden');
-        recebimentoTransferencia.classList.add('hidden');
-        formaRecebimento.classList.add('hidden');
+            opcoesAvulso.classList.add('hidden');
+            opcoesParcelado.classList.add('hidden');
+            opcoesCartao.classList.add('hidden');
+            opcoesRenovacaoParcelado.classList.add('hidden');
+            observacao.classList.add('hidden');
+            recebimentoPix.classList.add('hidden');
+            recebimentoTransferencia.classList.add('hidden');
+            formaRecebimento.classList.add('hidden');
 
-        if (tipo === 'avulso') {
-            opcoesAvulso.classList.remove('hidden');
-            formaRecebimento.classList.remove('hidden');
-        } else if (tipo === 'parcelado') {
-            opcoesParcelado.classList.remove('hidden');
-            formaRecebimento.classList.remove('hidden');
-            abrirModal();
-        } else if (tipo === 'cartao') {
-            opcoesCartao.classList.remove('hidden');
-        } else if (tipo === 'renovacao_parcelado') {
-            opcoesParcelado.classList.remove('hidden');
-            opcoesRenovacaoParcelado.classList.remove('hidden');
-            observacao.classList.remove('hidden');
-            formaRecebimento.classList.remove('hidden');
-        } else if (tipo === 'renovacao_cartao') {
-            opcoesCartao.classList.remove('hidden');
-            observacao.classList.remove('hidden');
+            if (tipo === 'avulso') {
+                opcoesAvulso.classList.remove('hidden');
+                formaRecebimento.classList.remove('hidden');
+            } else if (tipo === 'parcelado') {
+                opcoesParcelado.classList.remove('hidden');
+                formaRecebimento.classList.remove('hidden');
+                abrirModal();
+            } else if (tipo === 'cartao') {
+                opcoesCartao.classList.remove('hidden');
+            } else if (tipo === 'renovacao_parcelado') {
+                opcoesParcelado.classList.remove('hidden');
+                opcoesRenovacaoParcelado.classList.remove('hidden');
+                observacao.classList.remove('hidden');
+                formaRecebimento.classList.remove('hidden');
+            } else if (tipo === 'renovacao_cartao') {
+                opcoesCartao.classList.remove('hidden');
+                observacao.classList.remove('hidden');
+            }
         }
-    }
 
-    function abrirModal() {
-        const modal = document.getElementById('modalParcelado');
-        modal.style.display = "block";
-    }
+        function abrirModal() {
+            const modal = document.getElementById('modalParcelado');
+            modal.style.display = "block";
+        }
 
-    function fecharModal() {
-        const modal = document.getElementById('modalParcelado');
-        modal.style.display = "none";
-    }
-</script>
+        function abrirModalAviso() {
+            const modalAviso = document.getElementById('modalAviso');
+            modalAviso.style.display = "block";
+        }
+
+        function fecharModalAviso() {
+            const modalAviso = document.getElementById('modalAviso');
+            modalAviso.style.display = "none";
+        }
+
+        function concordarTermos() {
+            fecharModal();
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('modalParcelado');
+            modal.style.display = "none";
+        }
 
         function atualizarFormaRecebimento() {
             const forma = document.getElementById('formaRecebimento').value;
@@ -463,10 +493,14 @@
                 prestacao = total / parcelasCartao;
             }
 
-            document.getElementById('juros').innerText = `R$ ${juros.toFixed(2)}`;
-            document.getElementById('total').innerText = `R$ ${total.toFixed(2)}`;
-            document.getElementById('prestacao').innerText = `R$ ${prestacao.toFixed(2)}`;
-            document.getElementById('valorReceber').innerText = `R$ ${valorReceber.toFixed(2)}`;
+            document.getElementById('juros').innerText = formatarValor(juros);
+            document.getElementById('total').innerText = formatarValor(total);
+            document.getElementById('prestacao').innerText = formatarValor(prestacao);
+            document.getElementById('valorReceber').innerText = formatarValor(valorReceber);
+        }
+
+        function formatarValor(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
         function validarFormulario() {
@@ -497,93 +531,91 @@
             return true;
         }
 
-   function enviarWhatsApp() {
-    const nome = document.getElementById('name').value;
-    const telefone = document.getElementById('telefone').value;
-    const valor = document.getElementById('valor').value;
-    const tipo = document.getElementById('tipo').value;
-    let parcelas = '';
-    let ultimaPrestacao = '';
-    let observacao = document.getElementById('obs').value;
-    const operador = document.getElementById('operador').value;
+        function enviarWhatsApp() {
+            const nome = document.getElementById('name').value;
+            const telefone = document.getElementById('telefone').value;
+            const valor = document.getElementById('valor').value;
+            const tipo = document.getElementById('tipo').value;
+            let parcelas = '';
+            let ultimaPrestacao = '';
+            let observacao = document.getElementById('obs').value;
+            const operador = document.getElementById('operador').value;
 
-    if (tipo === 'parcelado' || tipo === 'renovacao_parcelado') {
-        parcelas = document.getElementById('parcelas').value;
-        if (tipo === 'renovacao_parcelado') {
-            ultimaPrestacao = document.getElementById('ultimaPrestacao').value;
+            if (tipo === 'parcelado' || tipo === 'renovacao_parcelado') {
+                parcelas = document.getElementById('parcelas').value;
+                if (tipo === 'renovacao_parcelado') {
+                    ultimaPrestacao = document.getElementById('ultimaPrestacao').value;
+                }
+            } else if (tipo === 'cartao' || tipo === 'renovacao_cartao') {
+                parcelas = document.getElementById('parcelasCartao').value;
+            } else if (tipo === 'avulso') {
+                parcelas = document.getElementById('prazo').value + ' dias';
+            }
+
+            const juros = document.getElementById('juros').innerText;
+            const total = document.getElementById('total').innerText;
+            const prestacao = document.getElementById('prestacao').innerText;
+            const valorReceber = document.getElementById('valorReceber').innerText;
+
+            let formaRecebimento = document.getElementById('formaRecebimento').value;
+            formaRecebimento = formaRecebimento === 'pix' ? 'PIX' : 'Transferência Bancária';
+
+            let detalhesRecebimento = '';
+
+            if (formaRecebimento === 'PIX') {
+                const tipoChavePix = document.getElementById('tipoChavePix').value;
+                const chavePix = document.getElementById('pix').value;
+                const bancoPix = document.getElementById('bancoPix').value;
+                const outroBancoPix = document.getElementById('bancoPixOutro').value;
+                const banco = bancoPix === 'outro' ? outroBancoPix : bancoPix;
+                detalhesRecebimento = `Banco: ${banco}\nTipo de Chave PIX: ${tipoChavePix}\nChave PIX: ${chavePix}`;
+            } else if (formaRecebimento === 'Transferência Bancária') {
+                const bancoTransfer = document.getElementById('bancoTransferencia').value;
+                const outroBancoTransfer = document.getElementById('bancoTransferenciaOutro').value;
+                const banco = bancoTransfer === 'outro' ? outroBancoTransfer : bancoTransfer;
+                const agencia = document.getElementById('agencia').value;
+                const conta = document.getElementById('conta').value;
+                const tipoConta = document.getElementById('tipoConta').value;
+                detalhesRecebimento = `Banco: ${banco}\nAgência: ${agencia}\nConta: ${conta}\nTipo de Conta: ${tipoConta}`;
+            }
+
+            let mensagem = `*Solicitação de Empréstimo*\n` +
+                `*Nome*: ${capitalizar(nome)}\n` +
+                `*Número de Telefone*: ${telefone}\n` +
+                `*Valor Solicitado*: ${valor}\n` +
+                `*Tipo de Empréstimo*: ${capitalizar(tipo.replace('renovacao', 'renovação'))}\n` +
+                `*Parcelas*: ${parcelas}\n` +
+                `*Juros*: ${juros}\n` +
+                `*Total*: ${total}\n` +
+                `*Prestação*: ${prestacao.replace('prestacao', 'prestação')}\n`;
+
+            // Adiciona informações de recebimento apenas se não for "cartão" ou "renovação do cartão"
+            if (tipo !== 'cartao' && tipo !== 'renovacao_cartao') {
+                mensagem += `*Valor a Receber*: ${valorReceber}\n` +
+                    `*Forma de Recebimento*: ${formaRecebimento}\n` +
+                    `*Detalhes do Recebimento*:\n${detalhesRecebimento}\n`;
+            }
+
+            mensagem += `*Observação*: ${observacao}\n` +
+                `*Colaborador*: ${capitalizar(operador)}\n` +
+                `*Data e Hora da Solicitação*: ${dataHora}`;
+
+            if (ultimaPrestacao) {
+                mensagem += `\nValor da Última Prestação a Abater: R$ ${ultimaPrestacao}`;
+            }
+
+            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento. Lembre-se: sua senha de 6 dígitos pode ser solicitada. Ela é pessoal e intransferível. Caso não possua, solicite o cadastro.*`;
+
+            const operadorNumero = document.querySelector(`#operador option[value="${operador}"]`).getAttribute('data-numero');
+            const whatsappLink = `https://wa.me/${operadorNumero}?text=${encodeURIComponent(mensagem)}`;
+            window.open(whatsappLink, '_blank');
         }
-    } else if (tipo === 'cartao' || tipo === 'renovacao_cartao') {
-        parcelas = document.getElementById('parcelasCartao').value;
-    } else if (tipo === 'avulso') {
-        parcelas = document.getElementById('prazo').value + ' dias';
-    }
 
-    const juros = document.getElementById('juros').innerText;
-    const total = document.getElementById('total').innerText;
-    const prestacao = document.getElementById('prestacao').innerText;
-    const valorReceber = document.getElementById('valorReceber').innerText;
+        function capitalizar(palavra) {
+            return palavra.charAt(0).toUpperCase() + palavra.slice(1);
+        }
 
-    let formaRecebimento = document.getElementById('formaRecebimento').value;
-    formaRecebimento = formaRecebimento === 'pix' ? 'PIX' : 'Transferência Bancária';
-
-    let detalhesRecebimento = '';
-
-    if (formaRecebimento === 'PIX') {
-        const tipoChavePix = document.getElementById('tipoChavePix').value;
-        const chavePix = document.getElementById('pix').value;
-        const bancoPix = document.getElementById('bancoPix').value;
-        const outroBancoPix = document.getElementById('bancoPixOutro').value;
-        const banco = bancoPix === 'outro' ? outroBancoPix : bancoPix;
-        detalhesRecebimento = `Banco: ${banco}\nTipo de Chave PIX: ${tipoChavePix}\nChave PIX: ${chavePix}`;
-    } else if (formaRecebimento === 'Transferência Bancária') {
-        const bancoTransfer = document.getElementById('bancoTransferencia').value;
-        const outroBancoTransfer = document.getElementById('bancoTransferenciaOutro').value;
-        const banco = bancoTransfer === 'outro' ? outroBancoTransfer : bancoTransfer;
-        const agencia = document.getElementById('agencia').value;
-        const conta = document.getElementById('conta').value;
-        const tipoConta = document.getElementById('tipoConta').value;
-        detalhesRecebimento = `Banco: ${banco}\nAgência: ${agencia}\nConta: ${conta}\nTipo de Conta: ${tipoConta}`;
-    }
-
-    let mensagem = `*Solicitação de Empréstimo*\n` +
-        `*Nome*: ${capitalizar(nome)}\n` +
-        `*Número de Telefone*: ${telefone}\n` +
-        `*Valor Solicitado*: ${valor}\n` +
-        `*Tipo de Empréstimo*: ${capitalizar(tipo.replace('renovacao', 'renovação'))}\n` +
-        `*Parcelas*: ${parcelas}\n` +
-        `*Juros*: ${juros}\n` +
-        `*Total*: ${total}\n` +
-        `*Prestação*: ${prestacao.replace('prestacao', 'prestação')}\n`;
-
-    // Adiciona informações de recebimento apenas se não for "cartão" ou "renovação do cartão"
-    if (tipo !== 'cartao' && tipo !== 'renovacao_cartao') {
-        mensagem += `*Valor a Receber*: ${valorReceber}\n` +
-            `*Forma de Recebimento*: ${formaRecebimento}\n` +
-            `*Detalhes do Recebimento*:\n${detalhesRecebimento}\n`;
-    }
-
-    mensagem += `*Observação*: ${observacao}\n` +
-        `*Colaborador*: ${capitalizar(operador)}\n` +
-        `*Data e Hora da Solicitação*: ${dataHora}`;
-
-    if (ultimaPrestacao) {
-        mensagem += `\nValor da Última Prestação a Abater: R$ ${ultimaPrestacao}`;
-    }
-
-    mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento. Lembre-se: sua senha de 6 dígitos pode ser solicitada. Ela é pessoal e intransferível. Caso não possua, solicite o cadastro.*`;
-
-    const operadorNumero = document.querySelector(`#operador option[value="${operador}"]`).getAttribute('data-numero');
-    const whatsappLink = `https://wa.me/${operadorNumero}?text=${encodeURIComponent(mensagem)}`;
-    window.open(whatsappLink, '_blank');
-}
-
-function capitalizar(palavra) {
-    return palavra.charAt(0).toUpperCase() + palavra.slice(1);
-}
-
-const dataHora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-
-
+        const dataHora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
         function mostrarConfirmacao() {
             document.getElementById('confirmacao').classList.remove('hidden');
