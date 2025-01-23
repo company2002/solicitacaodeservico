@@ -190,6 +190,7 @@
             <div id="opcoesAvulso" class="hidden">
                 <label for="prazo">Prazo (Dias):</label>
                 <select id="prazo">
+                    <option value="">Selecione uma opção</option>
                     <option value="20">20 dias - 20% de juros</option>
                     <option value="30">30 dias - 30% de juros</option>
                 </select>
@@ -198,6 +199,7 @@
             <div id="opcoesParcelado" class="hidden">
                 <label for="parcelas">Número de Parcelas:</label>
                 <select id="parcelas">
+                    <option value="">Selecione uma opção</option>
                     <option value="2">2 parcela - 30% de juros</option>
                     <option value="6">6 parcelas - 45% de juros</option>
                     <option value="10">10 parcelas - 65% de juros</option>
@@ -207,6 +209,7 @@
             <div id="opcoesCartao" class="hidden">
                 <label for="parcelasCartao">Número de Parcelas:</label>
                 <select id="parcelasCartao">
+                    <option value="">Selecione uma opção</option>
                     <option value="5">5 parcelas - 15% de juros</option>
                     <option value="10">10 parcelas - 20% de juros</option>
                 </select>
@@ -606,7 +609,7 @@
                 mensagem += `\nValor da Última Prestação a Abater: R$ ${ultimaPrestacao}`;
             }
 
-            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento. Lembre-se: sua senha de 6 dígitos pode ser solicitada. Ela é pessoal e intransferível. Caso não possua, solicite o cadastro.*`;
+            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento....*`;
 
             const operadorNumero = document.querySelector(`#operador option[value="${operador}"]`).getAttribute('data-numero');
             const whatsappLink = `https://wa.me/${operadorNumero}?text=${encodeURIComponent(mensagem)}`;
