@@ -605,7 +605,7 @@
                 mensagem += `\nValor da Última Prestação a Abater: R$ ${ultimaPrestacao}`;
             }
 
-            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento. Lembre-se: sua senha de 6 dígitos pode ser solicitada. Ela é pessoal e intransferível. Caso não possua, solicite o cadastro.*`;
+            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento.....*`;
 
             const operadorNumero = document.querySelector(`#operador option[value="${operador}"]`).getAttribute('data-numero');
             const whatsappLink = `https://wa.me/${operadorNumero}?text=${encodeURIComponent(mensagem)}`;
