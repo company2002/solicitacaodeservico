@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Empréstimo</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        h1 {
+            font-size: 26px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #444;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input,
+        select,
+        button,
+        textarea {
+            width: 80%;
+            max-width: 500px;
+            padding: 12px;
+            margin: 10px auto;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        #resultado {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        input:invalid {
+            border-color: red;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            input,
+            select,
+            button,
+            textarea {
+                font-size: 16px;
+            }
+
+            button {
+                padding: 12px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Solicitação de Serviço</h1>
+        <form id="loanForm">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" required>
+
+            <label for="telefone">Número de Telefone:</label>
+            <input type="text" id="telefone" required>
+
+
+
+            <label for="valor">Valor Solicitado (R$):</label>
+            <input type="text" id="valor" required>
+
+            <label for="tipo">Tipo de Empréstimo:</label>
+            <select id="tipo" onchange="atualizarOpcoes()">
+                <option value="">Selecione o tipo</option>
+                <option value="avulso">Avulso</option>
+                <option value="parcelado">Parcelado</option>
+                <option value="cartao">Cartão</option>
+                <option value="renovacao_parcelado">Renovação do Parcelado</option>
+                <option value="renovacao_cartao">Renovação do Cartão</option>
+            </select>
+
+            <div id="opcoesAvulso" class="hidden">
+                <label for="prazo">Prazo (Dias):</label>
+                <select id="prazo">
+                    <option value="20">20 dias - 20% de juros</option>
+                    <option value="30">30 dias - 30% de juros</option>
+                </select>
+            </div>
+
+            <div id="opcoesParcelado" class="hidden">
+                <label for="parcelas">Número de Parcelas:</label>
+                <select id="parcelas">
+                    <option value="1">1 parcela - 30% de juros</option>
+                    <option value="6">6 parcelas - 45% de juros</option>
+                    <option value="10">10 parcelas - 65% de juros</option>
+                </select>
+            </div>
+
+            <div id="opcoesCartao" class="hidden">
+                <label for="parcelasCartao">Número de Parcelas:</label>
+                <select id="parcelasCartao">
+                    <option value="5">5 parcelas - 15% de juros</option>
+                    <option value="10">10 parcelas - 20% de juros</option>
+                </select>
+            </div>
+
+            <div id="opcoesRenovacaoParcelado" class="hidden">
+                <label for="ultimaPrestacao">Valor da Última Prestação a Abater (R$):</label>
+                <input type="number" id="ultimaPrestacao" step="0.01">
+            </div>
+
+            <div id="observacao" class="hidden">
+                <label for="obs">Observação:</label>
+                <textarea id="obs" rows="3"></textarea>
+            </div>
+
+            <label for="formaRecebimento">Forma de Recebimento:</label>
+            <select id="formaRecebimento" onchange="atualizarFormaRecebimento()">
+                <option value="">Selecione</option>
+                <option value="pix">PIX</option>
+                <option value="transferencia">Transferência Bancária</option>
+            </select>
+
+            <div id="recebimentoPix" class="hidden">
+                <label for="tipoChavePix">Tipo de Chave PIX:</label>
+                <select id="tipoChavePix">
+                    <option value="cpf">CPF</option>
+                    <option value="email">E-mail</option>
+                    <option value="telefone">Telefone</option>
+                    <option value="aleatoria">Chave Aleatória</option>
+                </select>
+                <label for="pix">Chave PIX:</label>
+                <input type="text" id="pix">
+                <label for="bancoPix">Banco:</label>
+                <select id="bancoPix" onchange="mostrarOutroBanco('bancoPixOutro', this.value)">
+                    <option value="">Selecione o banco</option>
+                    <option value="Banco do Brasil">Banco do Brasil</option>
+                    <option value="Itaú Unibanco">Itaú Unibanco</option>
+                    <option value="Bradesco">Bradesco</option>
+                    <option value="Santander">Santander</option>
+                    <option value="Caixa Econômica Federal">Caixa Econômica Federal</option>
+                    <option value="BTG Pactual">BTG Pactual</option>
+                    <option value="Nubank">Nubank</option>
+                    <option value="Banco Inter">Banco Inter</option>
+                    <option value="outro">Outros</option>
+                </select>
+                <input type="text" id="bancoPixOutro" class="hidden" placeholder="Nome do Banco">
+            </div>
+
+            <div id="recebimentoTransferencia" class="hidden">
+                <label for="bancoTransferencia">Banco:</label>
+                <select id="bancoTransferencia" onchange="mostrarOutroBanco('bancoTransferenciaOutro', this.value)">
+                    <option value="">Selecione o banco</option>
+                    <option value="Banco do Brasil">Banco do Brasil</option>
+                    <option value="Itaú Unibanco">Itaú Unibanco</option>
+                    <option value="Bradesco">Bradesco</option>
+                    <option value="Santander">Santander</option>
+                    <option value="Caixa Econômica Federal">Caixa Econômica Federal</option>
+                    <option value="BTG Pactual">BTG Pactual</option>
+                    <option value="Nubank">Nubank</option>
+                    <option value="Banco Inter">Banco Inter</option>
+                    <option value="outro">Outros</option>
+                </select>
+                <input type="text" id="bancoTransferenciaOutro" class="hidden" placeholder="Nome do Banco">
+                <label for="agencia">Agência:</label>
+                <input type="text" id="agencia">
+                <label for="conta">Conta:</label>
+                <input type="text" id="conta">
+                <label for="tipoConta">Tipo de Conta:</label>
+                <select id="tipoConta">
+                    <option value="corrente">Corrente</option>
+                    <option value="poupanca">Poupança</option>
+                </select>
+            </div>
+
+            <label for="operador">Selecione o Colaborador:</label>
+            <select id="operador">
+                <option value="Escolha"></option>
+                <option value="Pedro" data-numero="5521977434614">Pedro</option>
+                <option value="Henrique" data-numero="5521979054104">Henrique</option>
+                <option value="Viviane" data-numero="552100000000">Viviane</option>
+                <option value="Paulo" data-numero="5521000000000">Paulo</option>
+            </select>
+
+            <div id="resultado">
+                <p>Juros: <span id="juros">R$ 0.00</span></p>
+                <p>Total com Juros: <span id="total">R$ 0.00</span></p>
+                <p>Prestação Mensal: <span id="prestacao">R$ 0.00</span></p>
+                <p>Valor a Receber: <span id="valorReceber">R$ 0.00</span></p>
+            </div>
+
+            <button type="button" id="calcularBtn">Calcular</button>
+            <button type="button" id="enviarBtn">Enviar Solicitação</button>
+        </form>
+
+        <div id="confirmacao" class="hidden">
+            <p>Sua solicitação foi enviada com sucesso!</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modalParcelado" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <p>Critérios para parcelamento: É necessário que todos os pagamentos estejam em dia e que o cliente tenha
+                mais de um ano de cadastro em nosso escritório. Caso atenda a esses requisitos, o processo poderá ser
+                encaminhado para análise..</p>
+            <button onclick="concordarTermos()">Concordar e Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calcularBtn').addEventListener('click', calcularValores);
+        document.getElementById('enviarBtn').addEventListener('click', function () {
+            if (validarFormulario()) {
+                enviarWhatsApp();
+                mostrarConfirmacao();
+            }
+        });
+
+        document.getElementById('valor').addEventListener('input', formatarMoeda);
+
+        function formatarMoeda() {
+            const input = document.getElementById('valor');
+            let valor = input.value.replace(/\D/g, '');
+
+            valor = (parseInt(valor) / 100).toFixed(2);
+            valor = valor.replace(".", ",");
+            valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+            input.value = 'R$ ' + valor;
+        }
+
+        document.getElementById('telefone').addEventListener('input', formatarTelefone);
+
+        function formatarTelefone() {
+            const input = document.getElementById('telefone');
+            let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+
+            // Formatação: XX XXXX-XXXXX
+            if (valor.length > 0) {
+                valor = valor.replace(/^(\d{2})(\d)/g, '$1 $2'); // Adiciona espaço após os 2 primeiros dígitos
+            }
+            if (valor.length > 6) {
+                valor = valor.replace(/(\d{4})(\d)/, '$1-$2'); // Adiciona hífen após os 4 dígitos seguintes
+            }
+
+            input.value = valor; // Atualiza o valor do campo de entrada
+        }
+
+
+        function atualizarOpcoes() {
+            const tipo = document.getElementById('tipo').value;
+            document.getElementById('opcoesAvulso').classList.add('hidden');
+            document.getElementById('opcoesParcelado').classList.add('hidden');
+            document.getElementById('opcoesCartao').classList.add('hidden');
+            document.getElementById('opcoesRenovacaoParcelado').classList.add('hidden');
+            document.getElementById('observacao').classList.add('hidden');
+
+            if (tipo === 'avulso') {
+                document.getElementById('opcoesAvulso').classList.remove('hidden');
+            } else if (tipo === 'parcelado') {
+                document.getElementById('opcoesParcelado').classList.remove('hidden');
+                abrirModal();
+            } else if (tipo === 'cartao') {
+                document.getElementById('opcoesCartao').classList.remove('hidden');
+            } else if (tipo === 'renovacao_parcelado') {
+                document.getElementById('opcoesParcelado').classList.remove('hidden');
+                document.getElementById('opcoesRenovacaoParcelado').classList.remove('hidden');
+                document.getElementById('observacao').classList.remove('hidden');
+            } else if (tipo === 'renovacao_cartao') {
+                document.getElementById('opcoesCartao').classList.remove('hidden');
+                document.getElementById('observacao').classList.remove('hidden');
+            }
+        }
+
+        function abrirModal() {
+            const modal = document.getElementById('modalParcelado');
+            modal.style.display = "block";
+        }
+
+        function concordarTermos() {
+            fecharModal();
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('modalParcelado');
+            modal.style.display = "none";
+        }
+
+        function atualizarFormaRecebimento() {
+            const forma = document.getElementById('formaRecebimento').value;
+            document.getElementById('recebimentoPix').classList.add('hidden');
+            document.getElementById('recebimentoTransferencia').classList.add('hidden');
+
+            if (forma === 'pix') {
+                document.getElementById('recebimentoPix').classList.remove('hidden');
+            } else if (forma === 'transferencia') {
+                document.getElementById('recebimentoTransferencia').classList.remove('hidden');
+            }
+        }
+
+        function mostrarOutroBanco(campoId, valorSelecionado) {
+            const campoOutroBanco = document.getElementById(campoId);
+            if (valorSelecionado === 'outro') {
+                campoOutroBanco.classList.remove('hidden');
+            } else {
+                campoOutroBanco.classList.add('hidden');
+            }
+        }
+
+        function calcularValores() {
+            const valorTexto = document.getElementById('valor').value;
+            const valor = parseFloat(valorTexto.replace(/[R$.]/g, '').replace(',', '.')) || 0;
+            let juros = 0;
+            let total = 0;
+            let prestacao = 0;
+            let valorReceber = valor; // Valor a Receber é sempre o valor solicitado
+            const tipo = document.getElementById('tipo').value;
+
+            if (tipo === 'avulso') {
+                const prazo = parseInt(document.getElementById('prazo').value);
+                juros = prazo === 20 ? valor * 0.2 : valor * 0.3;
+                total = valor + juros;
+            } else if (tipo === 'parcelado' || tipo === 'renovacao_parcelado') {
+                const parcelas = parseInt(document.getElementById('parcelas').value) || 1;
+                if (parcelas === 1) {
+                    juros = valor * 0.3;
+                } else if (parcelas === 6) {
+                    juros = valor * 0.45;
+                } else if (parcelas === 10) {
+                    juros = valor * 0.65;
+                }
+                total = valor + juros;
+                prestacao = total / parcelas;
+                if (tipo === 'renovacao_parcelado') {
+                    const ultimaPrestacao = parseFloat(document.getElementById('ultimaPrestacao').value) || 0;
+                    valorReceber = valor - ultimaPrestacao; // Abatendo a última prestação do valor solicitado
+                }
+            } else if (tipo === 'cartao' || tipo === 'renovacao_cartao') {
+                const parcelasCartao = parseInt(document.getElementById('parcelasCartao').value);
+                juros = parcelasCartao === 5 ? valor * 0.15 : valor * 0.2;
+                total = valor + juros;
+                prestacao = total / parcelasCartao;
+            }
+
+            document.getElementById('juros').innerText = `R$ ${juros.toFixed(2)}`;
+            document.getElementById('total').innerText = `R$ ${total.toFixed(2)}`;
+            document.getElementById('prestacao').innerText = `R$ ${prestacao.toFixed(2)}`;
+            document.getElementById('valorReceber').innerText = `R$ ${valorReceber.toFixed(2)}`;
+        }
+
+        function validarFormulario() {
+            const nome = document.getElementById('name').value.trim();
+            const valorTexto = document.getElementById('valor').value;
+            const valor = parseFloat(valorTexto.replace(/[R$.]/g, '').replace(',', '.'));
+            const telefone = document.getElementById('telefone').value.trim();
+
+            // Remover espaços e hífen para validar apenas os números
+            const telefoneNumerico = telefone.replace(/\D/g, '');
+
+            if (!nome || !/^[a-zA-Z\s]+$/.test(nome)) {
+                alert("Por favor, insira um nome válido.");
+                return false;
+            }
+
+            if (!valor || valor <= 0) {
+                alert("O valor solicitado deve ser maior que zero.");
+                return false;
+            }
+
+            // Validar se o número de telefone tem 10 ou 11 dígitos
+            if (!telefoneNumerico || !/^\d{10,11}$/.test(telefoneNumerico)) {
+                alert("Por favor, insira um número de telefone válido.");
+                return false;
+            }
+
+            return true;
+        }
+
+
+
+        function enviarWhatsApp() {
+            const nome = document.getElementById('name').value;
+            const telefone = document.getElementById('telefone').value; // Corrigido para obter o valor
+            const valor = document.getElementById('valor').value;
+            const tipo = document.getElementById('tipo').value;
+            let parcelas = '';
+            let ultimaPrestacao = '';
+            let observacao = document.getElementById('obs').value;
+            const operador = document.getElementById('operador').value;
+
+            if (tipo === 'parcelado' || tipo === 'renovacao_parcelado') {
+                parcelas = document.getElementById('parcelas').value;
+                if (tipo === 'renovacao_parcelado') {
+                    ultimaPrestacao = document.getElementById('ultimaPrestacao').value;
+                }
+            } else if (tipo === 'cartao' || tipo === 'renovacao_cartao') {
+                parcelas = document.getElementById('parcelasCartao').value;
+            } else if (tipo === 'avulso') {
+                parcelas = document.getElementById('prazo').value + ' dias';
+            }
+
+            const juros = document.getElementById('juros').innerText;
+            const total = document.getElementById('total').innerText;
+            const prestacao = document.getElementById('prestacao').innerText;
+            const valorReceber = document.getElementById('valorReceber').innerText;
+
+            let formaRecebimento = document.getElementById('formaRecebimento').value;
+            formaRecebimento = formaRecebimento === 'pix' ? 'PIX' : 'Transferência Bancária'; // Corrigir acentuação
+
+            let detalhesRecebimento = '';
+
+            if (formaRecebimento === 'PIX') {
+                const tipoChavePix = document.getElementById('tipoChavePix').value;
+                const chavePix = document.getElementById('pix').value;
+                const bancoPix = document.getElementById('bancoPix').value;
+                const outroBancoPix = document.getElementById('bancoPixOutro').value;
+                const banco = bancoPix === 'outro' ? outroBancoPix : bancoPix;
+                detalhesRecebimento = `Banco: ${banco}\nTipo de Chave PIX: ${tipoChavePix}\nChave PIX: ${chavePix}`;
+            } else if (formaRecebimento === 'Transferência Bancária') {
+                const bancoTransfer = document.getElementById('bancoTransferencia').value;
+                const outroBancoTransfer = document.getElementById('bancoTransferenciaOutro').value;
+                const banco = bancoTransfer === 'outro' ? outroBancoTransfer : bancoTransfer;
+                const agencia = document.getElementById('agencia').value;
+                const conta = document.getElementById('conta').value;
+                const tipoConta = document.getElementById('tipoConta').value;
+                detalhesRecebimento = `Banco: ${banco}\nAgência: ${agencia}\nConta: ${conta}\nTipo de Conta: ${tipoConta}`;
+            }
+            let mensagem = `*Solicitação de Empréstimo*\n` +
+                `*Nome*: ${nome}\n` +
+                `*Número de Telefone*: ${telefone}\n` + // Corrigido para exibir o valor do telefone
+                `*Valor Solicitado*: ${valor}\n` +
+                `*Tipo de Empréstimo*: ${tipo}\n` +
+                `*Parcelas*: ${parcelas}\n` +
+                `*Juros*: ${juros}\n` +
+                `*Total*: ${total}\n` +
+                `*Prestação*: ${prestacao}\n` +
+                `*Valor a Receber*: ${valorReceber}\n` +
+                `*Forma de Recebimento*: ${formaRecebimento}\n` +
+                `*Detalhes do Recebimento*:\n${detalhesRecebimento}\n` +
+                `*Observação*: ${observacao}\n` +
+                `*Colaborador*: ${operador}\n` +
+                `*Data e Hora da Solicitação*: ${dataHora}`;
+
+            if (ultimaPrestacao) {
+                mensagem += `\nValor da Última Prestação a Abater: R$ ${ultimaPrestacao}`;
+            }
+
+            mensagem += `\n\n*Atenção: Estamos analisando sua solicitação. Por favor, aguarde um momento. Lembre-se: sua senha de 6 dígitos pode ser solicitada. Ela é pessoal e intransferível. Caso não possua, solicite o cadastro.*`;
+
+            const operadorNumero = document.querySelector(`#operador option[value="${operador}"]`).getAttribute('data-numero');
+            const whatsappLink = `https://wa.me/${operadorNumero}?text=${encodeURIComponent(mensagem)}`;
+            window.open(whatsappLink, '_blank');
+        }
+
+        const dataHora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+
+
+        function mostrarConfirmacao() {
+            document.getElementById('confirmacao').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('confirmacao').classList.add('hidden');
+            }, 3000);
+        }
+
+    </script>
+</body>
+
+</html>
