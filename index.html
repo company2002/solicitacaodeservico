@@ -26,6 +26,43 @@
             color: #333;
         }
 
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            .container {
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                padding: 20px;
+                box-sizing: border-box;
+                border-radius: 0;
+                
+            }
+
+            input,
+            select,
+            button,
+            textarea {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            button {
+                padding: 10px;
+            }
+
+            .modal-content {
+                width: 90%;
+            }
+        }
+
         .container {
             max-width: 900px;
             margin: 20px auto;
@@ -106,7 +143,12 @@
 
         @media (max-width: 600px) {
             .container {
-                padding: 10px;
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                padding: 20px;
+                box-sizing: border-box;
+                border-radius: 0;
             }
 
             input,
