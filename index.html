@@ -30,15 +30,9 @@
 
 
 
-        @media (max-width: 600px) {
-            .container {
-                width: 100vw;
-                height: 100vh;
-                margin: 0;
-                padding: 20px;
-                box-sizing: border-box;
-                border-radius: 0;
-            }
+        @media (max-width: 768px) {
+
+
 
 
             button {
@@ -213,9 +207,12 @@
 
         @media (max-width: 600px) {
             .container {
-                width: 90%;                
-                padding: 20px;               
-                border-radius: 8px;
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                padding: 20px;
+                box-sizing: border-box;
+                border-radius: 0;
             }
 
             input,
@@ -227,7 +224,6 @@
 
             button {
                 padding: 12px;
-                font-size: 16px;
             }
         }
 
@@ -235,68 +231,46 @@
             display: none;
         }
 
-        * Substituir a parte do CSS do modal por este código */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    overflow-y: auto; /* Permite rolagem vertical se necessário */
-}
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* Reduzido de 60px para melhor visualização em mobile */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 90%;
-    max-width: 400px;
-    border-radius: 8px;
-    position: relative; /* Adicionado para posicionamento absoluto do botão fechar */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+        }
 
-.close {
-    position: absolute;
-    right: 10px;
-    top: 5px;
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0 5px;
-}
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-}
+        }
 
-/* Ajustes específicos para mobile */
-@media (max-width: 600px) {
-    .modal-content {
-        margin: 5% auto; /* Margem menor em dispositivos móveis */
-        width: 85%;
-        padding: 15px;
-    }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
 
-    .modal {
-        padding-top: 0; /* Remove o padding superior em mobile */
-    }
+        }
 
-    /* Garante que o botão não fique inacessível */
-    .modal button {
-        margin: 10px auto;
-        width: 100%;
-        max-width: 200px;
-        display: block;
-    }
-}
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+
+        }
     </style>
 </head>
 
@@ -308,147 +282,147 @@
                 <input type="text" id="name" placeholder="Nome Completo" required>
             </div>
 
-            <div class="input-group">
-                <i class="fas fa-phone"></i>
-                <input type="text" id="telefone" placeholder="Número de Telefone" required>
-            </div>
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" id="telefone" placeholder="Número de Telefone" required>
+                </div>
 
-            <div class="input-group">
-                <i class="fas fa-dollar-sign"></i>
-                <input type="text" id="valor" placeholder="Valor Solicitado (R$)" required>
-            </div>
-
-
-            <div class="input-group">
-                <select id="tipo" onchange="atualizarOpcoes()">
-                    <option value="" disabled selected>Tipo de Empréstimo</option>
-                    <option value="avulso">Avulso</option>
-                    <option value="parcelado">Parcelado</option>
-                    <option value="cartao">Cartão</option>
-                    <option value="renovacao_parcelado">Renovação do Parcelado</option>
-                    <option value="renovacao_cartao">Renovação do Cartão</option>
-                </select>
-            </div>
-
-            <div class="input-group hidden" id="opcoesAvulso">
-
-                <select id="prazo">
-                    <option value="" disabled selected>Prazo (Dias)</option>
-                    <option value="20">20 dias - 20% de juros</option>
-                    <option value="30">30 dias - 30% de juros</option>
-                </select>
-            </div>
-
-            <div class="input-group hidden" id="opcoesParcelado">
-
-                <select id="parcelas">
-                    <option value="" disabled selected>Número de Parcelas</option>
-                    <option value="2">2 parcela - 30% de juros</option>
-                    <option value="6">6 parcelas - 45% de juros</option>
-                    <option value="10">10 parcelas - 65% de juros</option>
-                </select>
-            </div>
+                <div class="input-group">
+                    <i class="fas fa-dollar-sign"></i>
+                    <input type="text" id="valor" placeholder="Valor Solicitado (R$)" required>
+                </div>
 
 
-            <div id="opcoesCartao" class="hidden">
-                <label for="parcelasCartao">Número de Parcelas:</label>
-                <select id="parcelasCartao">
-                    <option value="">Selecione uma opção</option>
-                    <option value="5">5 parcelas - 15% de juros</option>
-                    <option value="10">10 parcelas - 20% de juros</option>
-                </select>
-            </div>
+                <div class="input-group">                  
+                    <select id="tipo" onchange="atualizarOpcoes()">
+                        <option value="" disabled selected>Tipo de Empréstimo</option>
+                        <option value="avulso">Avulso</option>
+                        <option value="parcelado">Parcelado</option>
+                        <option value="cartao">Cartão</option>
+                        <option value="renovacao_parcelado">Renovação do Parcelado</option>
+                        <option value="renovacao_cartao">Renovação do Cartão</option>
+                    </select>
+                </div>
 
-            <div id="opcoesRenovacaoParcelado" class="hidden">
-                <label for="ultimaPrestacao">Valor da Última Prestação a Abater (R$):</label>
-                <input type="number" id="ultimaPrestacao" step="0.01">
-            </div>
+                <div class="input-group hidden" id="opcoesAvulso">
+                    
+                    <select id="prazo">
+                        <option value="" disabled selected>Prazo (Dias)</option>
+                        <option value="20">20 dias - 20% de juros</option>
+                        <option value="30">30 dias - 30% de juros</option>
+                    </select>
+                </div>
 
-            <div id="observacao" class="hidden">
-                <label for="obs">Observação:</label>
-                <textarea id="obs" rows="3"></textarea>
-            </div>
+                <div class="input-group hidden" id="opcoesParcelado">
+                    
+                    <select id="parcelas">
+                        <option value="" disabled selected>Número de Parcelas</option>
+                        <option value="2">2 parcela - 30% de juros</option>
+                        <option value="6">6 parcelas - 45% de juros</option>
+                        <option value="10">10 parcelas - 65% de juros</option>
+                    </select>
+                </div>
 
 
-            <select id="formaRecebimento" onchange="atualizarFormaRecebimento()">
-                <option value="">Forma de Recebimento</option>
-                <option value="pix">PIX</option>
-                <option value="transferencia">Transferência Bancária</option>
-            </select>
+                <div id="opcoesCartao" class="hidden">
+                    <label for="parcelasCartao">Número de Parcelas:</label>
+                    <select id="parcelasCartao">
+                        <option value="">Selecione uma opção</option>
+                        <option value="5">5 parcelas - 15% de juros</option>
+                        <option value="10">10 parcelas - 20% de juros</option>
+                    </select>
+                </div>
 
-            <div id="recebimentoPix" class="hidden">
+                <div id="opcoesRenovacaoParcelado" class="hidden">
+                    <label for="ultimaPrestacao">Valor da Última Prestação a Abater (R$):</label>
+                    <input type="number" id="ultimaPrestacao" step="0.01">
+                </div>
 
-                <select id="tipoChavePix">
-                    <option value="">Tipo de Chave PIX:</option>
-                    <option value="cpf">CPF</option>
-                    <option value="email">E-mail</option>
-                    <option value="telefone">Telefone</option>
-                    <option value="aleatoria">Chave Aleatória</option>
+                <div id="observacao" class="hidden">
+                    <label for="obs">Observação:</label>
+                    <textarea id="obs" rows="3"></textarea>
+                </div>
+
+
+                <select id="formaRecebimento" onchange="atualizarFormaRecebimento()">
+                    <option value="">Forma de Recebimento</option>
+                    <option value="pix">PIX</option>
+                    <option value="transferencia">Transferência Bancária</option>
                 </select>
 
-                <label for="pix">Informe sua chave Pix</label>
-                <input type="text" id="pix">
+                <div id="recebimentoPix" class="hidden">
+                    
+                    <select id="tipoChavePix">
+                        <option value="">Tipo de Chave PIX:</option>
+                        <option value="cpf">CPF</option>
+                        <option value="email">E-mail</option>
+                        <option value="telefone">Telefone</option>
+                        <option value="aleatoria">Chave Aleatória</option>
+                    </select>
+                    
+                    <label for="pix">Informe sua chave Pix</label>
+                    <input type="text" id="pix">
+                    
+                    <select id="bancoPix" onchange="mostrarOutroBanco('bancoPixOutro', this.value)">
+                        <option value="">Selecione o banco</option>
+                        <option value="Banco do Brasil">Banco do Brasil</option>
+                        <option value="Itaú Unibanco">Itaú Unibanco</option>
+                        <option value="Bradesco">Bradesco</option>
+                        <option value="Santander">Santander</option>
+                        <option value="Caixa Econômica Federal">Caixa Econômica Federal</option>
+                        <option value="BTG Pactual">BTG Pactual</option>
+                        <option value="Nubank">Nubank</option>
+                        <option value="Banco Inter">Banco Inter</option>
+                        <option value="outro">Outros</option>
+                    </select>
+                    <input type="text" id="bancoPixOutro" class="hidden" placeholder="Nome do Banco">
+                </div>
 
-                <select id="bancoPix" onchange="mostrarOutroBanco('bancoPixOutro', this.value)">
-                    <option value="">Selecione o banco</option>
-                    <option value="Banco do Brasil">Banco do Brasil</option>
-                    <option value="Itaú Unibanco">Itaú Unibanco</option>
-                    <option value="Bradesco">Bradesco</option>
-                    <option value="Santander">Santander</option>
-                    <option value="Caixa Econômica Federal">Caixa Econômica Federal</option>
-                    <option value="BTG Pactual">BTG Pactual</option>
-                    <option value="Nubank">Nubank</option>
-                    <option value="Banco Inter">Banco Inter</option>
-                    <option value="outro">Outros</option>
+                <div id="recebimentoTransferencia" class="hidden">
+                    <label for="bancoTransferencia"></label>
+                    <select id="bancoTransferencia" onchange="mostrarOutroBanco('bancoTransferenciaOutro', this.value)">
+                        <option value="">Selecione o banco</option>
+                        <option value="Banco do Brasil">Banco do Brasil</option>
+                        <option value="Itaú Unibanco">Itaú Unibanco</option>
+                        <option value="Bradesco">Bradesco</option>
+                        <option value="Santander">Santander</option>
+                        <option value="Caixa Econômica Federal">Caixa Econômica Federal</option>
+                        <option value="BTG Pactual">BTG Pactual</option>
+                        <option value="Nubank">Nubank</option>
+                        <option value="Banco Inter">Banco Inter</option>
+                        <option value="outro">Outros</option>
+                    </select>
+                    <input type="text" id="bancoTransferenciaOutro" class="hidden" placeholder="Nome do Banco">
+                    <label for="agencia">Agência:</label>
+                    <input type="text" id="agencia">
+                    <label for="conta">Conta:</label>
+                    <input type="text" id="conta">
+                    <label for="tipoConta">Tipo de Conta:</label>
+                    <select id="tipoConta">
+                        <option value="corrente">Corrente</option>
+                        <option value="poupanca">Poupança</option>
+                    </select>
+                </div>
+
+
+                <select id="operador">
+                    <option value="Escolha">Selecione o Colaborador</option>
+                    <label for="operador">Selecione o Colaborador:</label>
+                    <option value="Eduardo" data-numero="5521964337550">Eduardo</option>
+                    <option value="Paulo" data-numero="5521993529510">Paulo</option>
+                    <option value="Escritório" data-numero="5521964344834">Escritório</option>
+                    <option value="Carlos teste" data-numero="5521977434614">Carlos teste</option>
                 </select>
-                <input type="text" id="bancoPixOutro" class="hidden" placeholder="Nome do Banco">
-            </div>
 
-            <div id="recebimentoTransferencia" class="hidden">
-                <label for="bancoTransferencia"></label>
-                <select id="bancoTransferencia" onchange="mostrarOutroBanco('bancoTransferenciaOutro', this.value)">
-                    <option value="">Selecione o banco</option>
-                    <option value="Banco do Brasil">Banco do Brasil</option>
-                    <option value="Itaú Unibanco">Itaú Unibanco</option>
-                    <option value="Bradesco">Bradesco</option>
-                    <option value="Santander">Santander</option>
-                    <option value="Caixa Econômica Federal">Caixa Econômica Federal</option>
-                    <option value="BTG Pactual">BTG Pactual</option>
-                    <option value="Nubank">Nubank</option>
-                    <option value="Banco Inter">Banco Inter</option>
-                    <option value="outro">Outros</option>
-                </select>
-                <input type="text" id="bancoTransferenciaOutro" class="hidden" placeholder="Nome do Banco">
-                <label for="agencia">Agência:</label>
-                <input type="text" id="agencia">
-                <label for="conta">Conta:</label>
-                <input type="text" id="conta">
-                <label for="tipoConta">Tipo de Conta:</label>
-                <select id="tipoConta">
-                    <option value="corrente">Corrente</option>
-                    <option value="poupanca">Poupança</option>
-                </select>
-            </div>
+                <div id="resultado">
+                    <p>Juros: <span id="juros">R$ 0,00</span></p>
+                    <p>Total com Juros: <span id="total">R$ 0,00</span></p>
+                    <p>Prestação Mensal: <span id="prestacao">R$ 0,00</span></p>
+                    <p>Valor a Receber: <span id="valorReceber">R$ 0,00</span></p>
+                </div>
 
-
-            <select id="operador">
-                <option value="Escolha">Selecione o Colaborador</option>
-                <label for="operador">Selecione o Colaborador:</label>
-                <option value="Eduardo" data-numero="5521964337550">Eduardo</option>
-                <option value="Paulo" data-numero="5521993529510">Paulo</option>
-                <option value="Escritório" data-numero="5521964344834">Escritório</option>
-                <option value="Carlos teste" data-numero="5521977434614">Carlos teste</option>
-            </select>
-
-            <div id="resultado">
-                <p>Juros: <span id="juros">R$ 0,00</span></p>
-                <p>Total com Juros: <span id="total">R$ 0,00</span></p>
-                <p>Prestação Mensal: <span id="prestacao">R$ 0,00</span></p>
-                <p>Valor a Receber: <span id="valorReceber">R$ 0,00</span></p>
-            </div>
-
-            <button type="button" id="calcularBtn">Clique para Simular</button>
-            <button type="button" id="enviarBtn">Enviar Solicitação</button>
+                <button type="button" id="calcularBtn">Clique para Simular</button>
+                <button type="button" id="enviarBtn">Enviar Solicitação</button>
         </form>
 
         <div id="confirmacao" class="hidden">
@@ -762,17 +736,9 @@
             window.open(whatsappLink, '_blank');
         }
 
-
         function capitalizar(palavra) {
-            if (palavra.toLowerCase() === 'pix') {
-                return 'PIX';
-            }
-            if (palavra.toLowerCase() === 'poupanca') {
-                return 'Poupança';
-            }
             return palavra.charAt(0).toUpperCase() + palavra.slice(1);
         }
-
 
         const dataHora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
