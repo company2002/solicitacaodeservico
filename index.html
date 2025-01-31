@@ -213,12 +213,9 @@
 
         @media (max-width: 600px) {
             .container {
-                width: 100vw;
-                height: 100vh;
-                margin: 0;
-                padding: 20px;
-                box-sizing: border-box;
-                border-radius: 0;
+                width: 90%;                
+                padding: 20px;               
+                border-radius: 8px;
             }
 
             input,
@@ -230,6 +227,7 @@
 
             button {
                 padding: 12px;
+                font-size: 16px;
             }
         }
 
@@ -240,7 +238,7 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
@@ -248,16 +246,18 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
+            justify-content: center;
+            align-items: center;
 
         }
 
         .modal-content {
             background-color: #fefefe;
-            margin: 5% auto;
+            margin: auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
+            width: 90%;
+            max-width: 400px;
             border-radius: 8px;
 
         }
