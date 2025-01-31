@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Empréstimo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-image: url('001.jpg');
+            background: linear-gradient(135deg, #ff7b3e, #ffb347);
             /* Caminho da imagem */
             background-size: cover;
             /* Ajusta a imagem para cobrir toda a tela */
@@ -26,52 +28,93 @@
             color: #333;
         }
 
+
+
         @media (max-width: 768px) {
-            body {
-                padding: 0;
-                margin: 0;
-            }
 
-            .container {
-                width: 100vw;
-                height: 100vh;
-                margin: 0;
-                padding: 20px;
-                box-sizing: border-box;
-                border-radius: 0;
-                
-            }
 
-            input,
-            select,
-            button,
-            textarea {
-                width: 100%;
-                font-size: 14px;
-            }
 
-            h1 {
-                font-size: 22px;
-            }
 
             button {
                 padding: 10px;
             }
 
             .modal-content {
-                width: 90%;
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+                padding-top: 60px;
+
             }
+
         }
 
         .container {
-            max-width: 900px;
-            margin: 20px auto;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 0.8s ease-in-out;
+            background: rgba(255, 254, 254, 0.568);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            margin: 20px;
         }
+
+        .container::before {
+            content: 'Solicitação de Serviço';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff7b3e;
+            pointer-events: none;
+        }
+
+        .input-group input {
+            width: calc(100% - 40px);
+            /* Ajuste para acomodar o ícone */
+            padding: 12px 12px 12px 40px;
+            /* Deixe espaço para o ícone */
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            border-color: #ff7b3e;
+            display: block;
+            margin: 0 auto;
+            /* Centraliza o campo */
+        }
+
 
         h1 {
             font-size: 26px;
@@ -91,38 +134,59 @@
         select,
         button,
         textarea {
-            width: 80%;
-            max-width: 500px;
+            width: calc(100% - 26px);
             padding: 12px;
-            margin: 10px auto;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 2px solid #ddd;
+            border-radius: 30px;
             font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            margin: auto;
+            display: block;
+            border-color: #ff7b3e;
+            margin-bottom: 20px;
+
         }
 
         button {
-            background-color: #4CAF50;
+            width: calc(100% - 26px);
+            padding: 12px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #ec520a, #ffb347);
             color: white;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s;
+            margin: 10px auto;
+            display: block;
+
         }
 
         button:hover {
-            background-color: #2ba33b;
+            background: linear-gradient(135deg, #ff5e1f, #ffa726);
+
         }
 
         button:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
+
         }
 
         #resultado {
             margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 20px;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            /* Largura semelhante a uma tela de celular */
+            margin: 20px auto;
+            /* Centraliza horizontalmente */
         }
 
         input:invalid {
@@ -178,6 +242,7 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
+
         }
 
         .modal-content {
@@ -188,6 +253,7 @@
             width: 80%;
             max-width: 500px;
             border-radius: 8px;
+
         }
 
         .close {
@@ -195,6 +261,7 @@
             float: right;
             font-size: 28px;
             font-weight: bold;
+
         }
 
         .close:hover,
@@ -202,51 +269,60 @@
             color: black;
             text-decoration: none;
             cursor: pointer;
+
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Solicitação de Serviço</h1>
         <form id="loanForm">
-            <label for="name">Nome Completo:</label>
-            <input type="text" id="name" required>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="name" placeholder="Nome Completo" required>
+            </div>
 
-            <label for="telefone">Número de Telefone:</label>
-            <input type="text" id="telefone" required>
+            <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input type="text" id="telefone" placeholder="Número de Telefone" required>
+            </div>
 
-            <label for="valor">Valor Solicitado (R$):</label>
-            <input type="text" id="valor" required>
+            <div class="input-group">
+                <i class="fas fa-dollar-sign"></i>
+                <input type="text" id="valor" placeholder="Valor Solicitado (R$)" required>
+            </div>
 
-            <label for="tipo">Tipo de Empréstimo:</label>
-            <select id="tipo" onchange="atualizarOpcoes()">
-                <option value="">Selecione o tipo</option>
-                <option value="avulso">Avulso</option>
-                <option value="parcelado">Parcelado</option>
-                <option value="cartao">Cartão</option>
-                <option value="renovacao_parcelado">Renovação do Parcelado</option>
-                <option value="renovacao_cartao">Renovação do Cartão</option>
-            </select>
 
-            <div id="opcoesAvulso" class="hidden">
-                <label for="prazo">Prazo (Dias):</label>
+            <div class="input-group">
+                <select id="tipo" onchange="atualizarOpcoes()">
+                    <option value="" disabled selected>Tipo de Empréstimo</option>
+                    <option value="avulso">Avulso</option>
+                    <option value="parcelado">Parcelado</option>
+                    <option value="cartao">Cartão</option>
+                    <option value="renovacao_parcelado">Renovação do Parcelado</option>
+                    <option value="renovacao_cartao">Renovação do Cartão</option>
+                </select>
+            </div>
+
+            <div class="input-group hidden" id="opcoesAvulso">
+
                 <select id="prazo">
-                    <option value="">Selecione uma opção</option>
+                    <option value="" disabled selected>Prazo (Dias)</option>
                     <option value="20">20 dias - 20% de juros</option>
                     <option value="30">30 dias - 30% de juros</option>
                 </select>
             </div>
 
-            <div id="opcoesParcelado" class="hidden">
-                <label for="parcelas">Número de Parcelas:</label>
+            <div class="input-group hidden" id="opcoesParcelado">
+
                 <select id="parcelas">
-                    <option value="">Selecione uma opção</option>
+                    <option value="" disabled selected>Número de Parcelas</option>
                     <option value="2">2 parcela - 30% de juros</option>
                     <option value="6">6 parcelas - 45% de juros</option>
                     <option value="10">10 parcelas - 65% de juros</option>
                 </select>
             </div>
+
 
             <div id="opcoesCartao" class="hidden">
                 <label for="parcelasCartao">Número de Parcelas:</label>
@@ -267,24 +343,26 @@
                 <textarea id="obs" rows="3"></textarea>
             </div>
 
-            <label for="formaRecebimento">Forma de Recebimento:</label>
+
             <select id="formaRecebimento" onchange="atualizarFormaRecebimento()">
-                <option value="">Selecione</option>
+                <option value="">Forma de Recebimento</option>
                 <option value="pix">PIX</option>
                 <option value="transferencia">Transferência Bancária</option>
             </select>
 
             <div id="recebimentoPix" class="hidden">
-                <label for="tipoChavePix">Tipo de Chave PIX:</label>
+
                 <select id="tipoChavePix">
+                    <option value="">Tipo de Chave PIX:</option>
                     <option value="cpf">CPF</option>
                     <option value="email">E-mail</option>
                     <option value="telefone">Telefone</option>
                     <option value="aleatoria">Chave Aleatória</option>
                 </select>
-                <label for="pix">Chave PIX:</label>
+
+                <label for="pix">Informe sua chave Pix</label>
                 <input type="text" id="pix">
-                <label for="bancoPix">Banco:</label>
+
                 <select id="bancoPix" onchange="mostrarOutroBanco('bancoPixOutro', this.value)">
                     <option value="">Selecione o banco</option>
                     <option value="Banco do Brasil">Banco do Brasil</option>
@@ -301,7 +379,7 @@
             </div>
 
             <div id="recebimentoTransferencia" class="hidden">
-                <label for="bancoTransferencia">Banco:</label>
+                <label for="bancoTransferencia"></label>
                 <select id="bancoTransferencia" onchange="mostrarOutroBanco('bancoTransferenciaOutro', this.value)">
                     <option value="">Selecione o banco</option>
                     <option value="Banco do Brasil">Banco do Brasil</option>
@@ -326,9 +404,9 @@
                 </select>
             </div>
 
-            <label for="operador">Selecione o Colaborador:</label>
+
             <select id="operador">
-                <option value="Escolha"></option>
+                <option value="Escolha">Selecione o Colaborador</option>
                 <label for="operador">Selecione o Colaborador:</label>
                 <option value="Eduardo" data-numero="5521964337550">Eduardo</option>
                 <option value="Paulo" data-numero="5521993529510">Paulo</option>
@@ -658,9 +736,17 @@
             window.open(whatsappLink, '_blank');
         }
 
+
         function capitalizar(palavra) {
+            if (palavra.toLowerCase() === 'pix') {
+                return 'PIX';
+            }
+            if (palavra.toLowerCase() === 'poupanca') {
+                return 'Poupança';
+            }
             return palavra.charAt(0).toUpperCase() + palavra.slice(1);
         }
+
 
         const dataHora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
