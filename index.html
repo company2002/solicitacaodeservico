@@ -30,9 +30,15 @@
 
 
 
-        @media (max-width: 768px) {
-
-
+        @media (max-width: 600px) {
+            .container {
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                padding: 20px;
+                box-sizing: border-box;
+                border-radius: 0;
+            }
 
 
             button {
@@ -231,47 +237,46 @@
             display: none;
         }
 
-       .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000; /* Certifique-se de que está acima de todos os outros elementos */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.8); /* Aumenta a opacidade para maior contraste */
-    justify-content: center;
-    align-items: center;
-    display: flex; /* Flexbox para centralizar conteúdo */
-}
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
 
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center; /* Centraliza o texto */
-}
+        }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    margin-right: -10px; /* Ajusta a posição do botão de fechar */
-}
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+
+        }
     </style>
 </head>
 
